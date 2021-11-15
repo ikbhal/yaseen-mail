@@ -10,7 +10,9 @@ const mailjet = require('node-mailjet')
 
 app.post('/mail_status', (req, res) => {
     var msg = req.body.msg || 'default msg: Namaaz daily 5 times with jamaat';
-    res.send("mail status msg:" + msg);
+    var to = req.body.to || 'iqbalforall@gmail.com';
+    sendMail(to, msg);
+    res.send("mail status to: " + to + ", msg:" + msg);
 });
 app.get('/mail', (req,res) =>{
     var msg = req.query.msg || 'Jikr Allah 1000 times daily';
