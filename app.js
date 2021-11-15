@@ -1,4 +1,8 @@
 const express = require("express");
+const firebase = require("firebase");
+// Required for side-effects
+require("firebase/firestore");
+
 const app = express();
 
 app.use(express.json());
@@ -8,6 +12,9 @@ const mailjet = require('node-mailjet')
 .connect('51adbeea591a8cfc93cfad67bc690e3a',
  '3ff8fe7a682c89045372c90c303522f9')
 
+app.get('/firestore_test', (req, res) => {
+    res.send("firestore test");
+});
 app.post('/mail_status', (req, res) => {
     var msg = req.body.msg || 'default msg: Namaaz daily 5 times with jamaat';
     var to = req.body.to || 'iqbalforall@gmail.com';
