@@ -1,0 +1,8 @@
+doctype html  
+html  
+    head  
+        title A simple pug example  
+    body
+        ul
+            each val, key in readYaseenList
+                li= key + ': read yaseen=>' + val.read_yaseen +  ", date: " + val.date + ", sdate:" + val.sdate 

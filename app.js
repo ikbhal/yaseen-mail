@@ -13,6 +13,8 @@ firebase.initializeApp({
 var db = firebase.firestore();
 
 const app = express();
+app.set("view engine","pug");
+app.set('views', './views');
 
 app.use(express.json());
 const port = process.env.PORT || 3001;
@@ -21,6 +23,24 @@ const mailjet = require('node-mailjet')
 .connect('51adbeea591a8cfc93cfad67bc690e3a',
  '3ff8fe7a682c89045372c90c303522f9');
 
+
+app.get('/pugtest', (req, res) => {
+    // app.get('/', function (req, res) {  
+        // res.render('view.pug', index);  
+        res.render('index');  
+    // });  
+});
+app.get('/list_page', (req, res)=>{
+    db.collection("yasee-mail").get().then((querySnapshot) => {
+        var result = {};
+        querySnapshot.forEach((doc) => {
+            // console.log(`${doc.id} => ${doc.data()}`);
+            result[doc.id] = doc.data();
+        });
+
+        res.render('list', {'readYaseenList': result});
+    });
+});
 app.get('/list', (req, res) => {
 
     db.collection("yasee-mail").get().then((querySnapshot) => {
