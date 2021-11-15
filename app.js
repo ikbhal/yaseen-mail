@@ -3,6 +3,15 @@ const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
 
+// Initialize Cloud Firestore through Firebase
+firebase.initializeApp({
+  apiKey: "AIzaSyCqJyBoPLXy4CpotZPOsSKjK4rKJTCAbgE",
+  authDomain: "ikbhal-cb53f.firebaseapp.com",
+  projectId: "ikbhal-cb53f"
+});
+
+var db = firebase.firestore();
+
 const app = express();
 
 app.use(express.json());
@@ -13,7 +22,16 @@ const mailjet = require('node-mailjet')
  '3ff8fe7a682c89045372c90c303522f9')
 
 app.get('/firestore_test', (req, res) => {
-    res.send("firestore test");
+
+    db.collection("yasee-mail").get().then((querySnapshot) => {
+        var result = {};
+        querySnapshot.forEach((doc) => {
+            // console.log(`${doc.id} => ${doc.data()}`);
+            result[doc.id] = doc.data();
+        });
+        res.json({body:result, status:"ok"});
+    });
+    // res.send("firestore test");
 });
 app.post('/mail_status', (req, res) => {
     var msg = req.body.msg || 'default msg: Namaaz daily 5 times with jamaat';
