@@ -19,7 +19,38 @@ const port = process.env.PORT || 3001;
 const mailjet = require('node-mailjet')
 // .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 .connect('51adbeea591a8cfc93cfad67bc690e3a',
- '3ff8fe7a682c89045372c90c303522f9')
+ '3ff8fe7a682c89045372c90c303522f9');
+
+app.get('/list', (req, res) => {
+
+    db.collection("yasee-mail").get().then((querySnapshot) => {
+        var result = {};
+        querySnapshot.forEach((doc) => {
+            // console.log(`${doc.id} => ${doc.data()}`);
+            result[doc.id] = doc.data();
+        });
+
+        res.send({body: result, status: "ok"});
+    });
+    // res.send("yaseen list from firstore soon");
+});
+app.get('/done', (req, res) => {
+    var readYaseenFlag = req.query.readYaseen ==='true';
+    var sdate = req.query.sdate || new Date().toISOString().slice(0, 10);
+    db.collection("yasee-mail").add({
+        
+        // date: new Date().now(),
+        sdate: sdate,
+        read_yaseen: readYaseenFlag
+    })
+    .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+        console.error("Error adding document: ", error);
+    });
+    res.send('done');
+});
 
 app.get('/firestore_test', (req, res) => {
 
